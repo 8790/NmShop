@@ -149,4 +149,17 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="countByUsername" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select
+    count(0)
+    from mall_user
+    where username = #{username,jdbcType=INTEGER}
+  </select>
+  <select id="countByEmail" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select
+    count(0)
+    from mall_user
+    where email = #{email,jdbcType=INTEGER}
+  </select>
 </mapper>
