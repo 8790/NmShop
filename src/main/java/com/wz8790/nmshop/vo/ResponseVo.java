@@ -22,12 +22,21 @@ public class ResponseVo<T> {
         this.msg = msg;
     }
 
+    public ResponseVo(Integer code, T data) {
+        this.code = code;
+        this.data = data;
+    }
 
     public static <T> ResponseVo<T> success() {
         return new ResponseVo<>(StatusCodeEnum.SUCCESS.getCode(), StatusCodeEnum.SUCCESS.getDesc());
     }
 
-    public static <T> ResponseVo<T> error(StatusCodeEnum statusCodeEnum) {
+    public static <T> ResponseVo<T> success(T data) {
+        return new ResponseVo<>(StatusCodeEnum.SUCCESS.getCode(), data);
+    }
+
+
+        public static <T> ResponseVo<T> error(StatusCodeEnum statusCodeEnum) {
         return new ResponseVo<>(statusCodeEnum.getCode(), statusCodeEnum.getDesc());
     }
 

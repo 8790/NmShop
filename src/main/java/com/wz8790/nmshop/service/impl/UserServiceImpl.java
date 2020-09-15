@@ -7,6 +7,7 @@ import com.wz8790.nmshop.pojo.User;
 import com.wz8790.nmshop.service.IUserService;
 import com.wz8790.nmshop.vo.ResponseVo;
 import com.wz8790.nmshop.vo.UserVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -46,4 +47,24 @@ public class UserServiceImpl implements IUserService {
         }
         return ResponseVo.success();
     }
+
+    @Override
+    public ResponseVo<UserVo> login(String username, String password) {
+        User user = userMapper.selectByUsername(username);
+
+        //判断用户是否存在
+        if (user == null) {
+            return ResponseVo.error(StatusCodeEnum.USERNAME_OR_PASSWORD_ERROR);
+        }
+        //判断密码是否正确
+        if (!user.getPassword().equalsIgnoreCase(DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8)))) {
+            return ResponseVo.error(StatusCodeEnum.USERNAME_OR_PASSWORD_ERROR);
+        }
+
+        UserVo userVo = new UserVo();
+        BeanUtils.copyProperties(user, userVo);
+        return ResponseVo.success(userVo);
+    }
+
+
 }
