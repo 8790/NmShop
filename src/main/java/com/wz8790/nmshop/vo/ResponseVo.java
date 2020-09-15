@@ -11,19 +11,19 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseVo<T> {
 
-    private Integer code;
+    private Integer status;
 
     private String msg;
 
     private T data;
 
-    public ResponseVo(Integer code, String msg) {
-        this.code = code;
+    public ResponseVo(Integer status, String msg) {
+        this.status = status;
         this.msg = msg;
     }
 
-    public ResponseVo(Integer code, T data) {
-        this.code = code;
+    public ResponseVo(Integer status, T data) {
+        this.status = status;
         this.data = data;
     }
 
