@@ -1,7 +1,7 @@
 package com.wz8790.nmshop.service.impl;
 
 import com.wz8790.nmshop.NmShopApplicationTests;
-import com.wz8790.nmshop.emum.RoleEnum;
+import com.wz8790.nmshop.enums.RoleEnum;
 import com.wz8790.nmshop.pojo.User;
 import com.wz8790.nmshop.service.IUserService;
 import org.junit.Test;

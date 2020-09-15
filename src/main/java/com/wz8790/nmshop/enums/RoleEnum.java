@@ -1,4 +1,4 @@
-package com.wz8790.nmshop.emum;
+package com.wz8790.nmshop.enums;
 
 import lombok.Getter;
 

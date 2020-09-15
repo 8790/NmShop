@@ -1,6 +1,8 @@
 package com.wz8790.nmshop.service;
 
 import com.wz8790.nmshop.pojo.User;
+import com.wz8790.nmshop.vo.ResponseVo;
+import com.wz8790.nmshop.vo.UserVo;
 
 public interface IUserService {
 
@@ -8,5 +10,5 @@ public interface IUserService {
     /**
      * 注册
      */
-    void register(User user);
+    ResponseVo<UserVo> register(User user);
 }
