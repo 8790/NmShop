@@ -3,6 +3,9 @@ package com.wz8790.nmshop.vo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wz8790.nmshop.enums.StatusCodeEnum;
 import lombok.Data;
+import org.springframework.validation.BindingResult;
+
+import java.util.Objects;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -26,5 +29,14 @@ public class ResponseVo<T> {
 
     public static <T> ResponseVo<T> error(StatusCodeEnum statusCodeEnum) {
         return new ResponseVo<>(statusCodeEnum.getCode(), statusCodeEnum.getDesc());
+    }
+
+    public static <T> ResponseVo<T> error(StatusCodeEnum statusCodeEnum, BindingResult bindingResult) {
+        return new ResponseVo<>(
+                statusCodeEnum.getCode(),
+                statusCodeEnum.getDesc()
+                        + ", " + Objects.requireNonNull(bindingResult.getFieldError()).getField()
+                        + " " + bindingResult.getFieldError().getDefaultMessage()
+        );
     }
 }
