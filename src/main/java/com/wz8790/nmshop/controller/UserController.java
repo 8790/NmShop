@@ -57,20 +57,11 @@ public class UserController {
     public ResponseVo<UserVo> userInfo(HttpSession session) {
         UserVo userVo = (UserVo) session.getAttribute(CURRENT_USER);
 
-        if (userVo == null) {
-            return ResponseVo.error(StatusCodeEnum.NEED_LOGIN_ERROR);
-        }
-
         return ResponseVo.success(userVo);
     }
 
     @GetMapping("/user/logout")
     public ResponseVo<UserVo> logout(HttpSession session) {
-        UserVo userVo = (UserVo) session.getAttribute(CURRENT_USER);
-
-        if (userVo == null) {
-            return ResponseVo.error(StatusCodeEnum.NEED_LOGIN_ERROR);
-        }
 
         session.removeAttribute(CURRENT_USER);
 

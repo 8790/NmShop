@@ -14,4 +14,10 @@ public class RuntimeExceptionHandler {
     public ResponseVo handle(RuntimeException e) {
         return ResponseVo.error(StatusCodeEnum.SERVER_ERROR, e.getMessage());
     }
+
+    @ExceptionHandler(UserLoginException.class)
+    @ResponseBody
+    public ResponseVo userLoginHandle() {
+        return ResponseVo.error(StatusCodeEnum.NEED_LOGIN_ERROR);
+    }
 }
