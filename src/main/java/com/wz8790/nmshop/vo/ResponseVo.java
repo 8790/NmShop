@@ -31,6 +31,10 @@ public class ResponseVo<T> {
         return new ResponseVo<>(statusCodeEnum.getCode(), statusCodeEnum.getDesc());
     }
 
+    public static <T> ResponseVo<T> error(StatusCodeEnum statusCodeEnum, String msg) {
+        return new ResponseVo<>(statusCodeEnum.getCode(), msg);
+    }
+
     public static <T> ResponseVo<T> error(StatusCodeEnum statusCodeEnum, BindingResult bindingResult) {
         return new ResponseVo<>(
                 statusCodeEnum.getCode(),
