@@ -7,6 +7,7 @@ import com.wz8790.nmshop.pojo.User;
 import com.wz8790.nmshop.service.IUserService;
 import com.wz8790.nmshop.vo.ResponseVo;
 import com.wz8790.nmshop.vo.UserVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -20,6 +21,7 @@ import javax.validation.Valid;
 
 import static com.wz8790.nmshop.consts.NmShopConsts.CURRENT_USER;
 
+@Slf4j
 @RestController
 public class UserController {
 
@@ -29,6 +31,8 @@ public class UserController {
     @PostMapping("/user/register")
     public ResponseVo<UserVo> register(@Valid @RequestBody UserRegisterForm userRegisterForm,
                                        BindingResult bindingResult) {
+
+        log.info("/user/register -------> {}", userRegisterForm.getUsername());
 
         if (bindingResult.hasErrors()) {
             return ResponseVo.error(StatusCodeEnum.PARAM_ERROR, bindingResult);
@@ -43,6 +47,9 @@ public class UserController {
     public ResponseVo<UserVo> login(@Valid @RequestBody UserLoginForm userLoginForm,
                                     BindingResult bindingResult,
                                     HttpSession httpSession) {
+
+        log.info("/user/login -------> {}", userLoginForm.getUsername());
+
         if (bindingResult.hasErrors()) {
             return ResponseVo.error(StatusCodeEnum.PARAM_ERROR, bindingResult);
         }
@@ -55,6 +62,9 @@ public class UserController {
 
     @GetMapping("/user")
     public ResponseVo<UserVo> userInfo(HttpSession session) {
+
+        log.info("/user -------> ");
+
         UserVo userVo = (UserVo) session.getAttribute(CURRENT_USER);
 
         return ResponseVo.success(userVo);
@@ -62,6 +72,8 @@ public class UserController {
 
     @GetMapping("/user/logout")
     public ResponseVo<UserVo> logout(HttpSession session) {
+
+        log.info("/user/logout -------> ");
 
         session.removeAttribute(CURRENT_USER);
 
