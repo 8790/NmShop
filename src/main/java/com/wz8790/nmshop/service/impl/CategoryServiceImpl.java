@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,9 +52,34 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     /**
+     * 查出该分类以及下面所有的子分类的id
+     * 采用递归方式
+     * 定义一个新的方法用来减少数据库访问次数
+     *
+     * @param id        要查的id
+     * @param resultSet 结果集
+     */
+    @Override
+    public void findSubCategoryId(Integer id, Set<Integer> resultSet) {
+        List<Category> categories = categoryMapper.selectAll();
+        findSubCategoryId(id, resultSet, categories);
+    }
+
+
+    private void findSubCategoryId(Integer id, Set<Integer> resultSet, List<Category> categories) {
+        for (Category category : categories) {
+            if (category.getParentId().equals(id)) {
+                resultSet.add(category.getId());
+                findSubCategoryId(category.getId(), resultSet, categories);
+            }
+        }
+    }
+
+    /**
      * 查出子分类，使用递归的方式
+     *
      * @param categoryVos 要查出的子分类,其中的数据都是父节点
-     * @param categories 所有分类数据的数据集
+     * @param categories  所有分类数据的数据集
      */
     private void findSubCategory(List<CategoryVo> categoryVos, List<Category> categories) {
         for (CategoryVo categoryVo : categoryVos) {
