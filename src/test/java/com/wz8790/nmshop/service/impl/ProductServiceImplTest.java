@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.wz8790.nmshop.NmShopApplicationTests;
 import com.wz8790.nmshop.enums.StatusCodeEnum;
 import com.wz8790.nmshop.service.IProductService;
+import com.wz8790.nmshop.vo.ProductDetailVo;
 import com.wz8790.nmshop.vo.ProductVo;
 import com.wz8790.nmshop.vo.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
@@ -25,5 +26,11 @@ public class ProductServiceImplTest extends NmShopApplicationTests {
         log.info("list2 = {}", list2);
         Assert.assertEquals(StatusCodeEnum.SUCCESS.getCode(), list.getStatus());
         Assert.assertEquals(StatusCodeEnum.SUCCESS.getCode(), list2.getStatus());
+    }
+
+    @Test
+    public void detail() {
+        ResponseVo<ProductDetailVo> detail = productService.detail(26);
+        Assert.assertEquals(StatusCodeEnum.SUCCESS.getCode(), detail.getStatus());
     }
 }

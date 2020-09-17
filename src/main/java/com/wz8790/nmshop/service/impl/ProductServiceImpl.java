@@ -3,9 +3,11 @@ package com.wz8790.nmshop.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wz8790.nmshop.dao.ProductMapper;
+import com.wz8790.nmshop.enums.StatusCodeEnum;
 import com.wz8790.nmshop.pojo.Product;
 import com.wz8790.nmshop.service.ICategoryService;
 import com.wz8790.nmshop.service.IProductService;
+import com.wz8790.nmshop.vo.ProductDetailVo;
 import com.wz8790.nmshop.vo.ProductVo;
 import com.wz8790.nmshop.vo.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,9 @@ import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.wz8790.nmshop.enums.ProductStatusEnum.DELETED;
+import static com.wz8790.nmshop.enums.ProductStatusEnum.OFF_SALE;
 
 @Slf4j
 @Service
@@ -55,5 +60,17 @@ public class ProductServiceImpl implements IProductService {
 
         PageInfo<ProductVo> pageInfo = new PageInfo<>(productVoList);
         return ResponseVo.success(pageInfo);
+    }
+
+    @Override
+    public ResponseVo<ProductDetailVo> detail(Integer productId) {
+        Product product = productMapper.selectByPrimaryKey(productId);
+
+        if (product.getStatus().equals(OFF_SALE.getCode()) || product.getStatus().equals(DELETED.getCode())) {
+            return ResponseVo.error(StatusCodeEnum.PRODUCT_OFF_SALE_OR_DELETED);
+        }
+        ProductDetailVo productDetailVo = new ProductDetailVo();
+        BeanUtils.copyProperties(product, productDetailVo);
+        return ResponseVo.success(productDetailVo);
     }
 }
