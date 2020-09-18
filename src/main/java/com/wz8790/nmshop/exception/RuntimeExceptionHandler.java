@@ -3,6 +3,8 @@ package com.wz8790.nmshop.exception;
 import com.wz8790.nmshop.enums.StatusCodeEnum;
 import com.wz8790.nmshop.vo.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,4 +26,12 @@ public class RuntimeExceptionHandler {
         log.info("用户未登录！");
         return ResponseVo.error(StatusCodeEnum.NEED_LOGIN_ERROR);
     }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseBody
+    public ResponseVo notValidExceptionHandle(MethodArgumentNotValidException e) {
+        BindingResult bindingResult = e.getBindingResult();
+        return ResponseVo.error(StatusCodeEnum.PARAM_ERROR, bindingResult);
+    }
+
 }

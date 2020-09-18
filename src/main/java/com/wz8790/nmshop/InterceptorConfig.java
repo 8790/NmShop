@@ -12,7 +12,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
         registry.addInterceptor(new UserLoginInterceptor())
                 .addPathPatterns("/**")
                 .excludePathPatterns(
-                        "error",
+                        "/error",
                         "/user/login",
                         "/user/register",
                         "/categories",

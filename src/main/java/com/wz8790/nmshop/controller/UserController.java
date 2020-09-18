@@ -1,8 +1,7 @@
 package com.wz8790.nmshop.controller;
 
-import com.wz8790.nmshop.enums.StatusCodeEnum;
-import com.wz8790.nmshop.form.UserRegisterForm;
 import com.wz8790.nmshop.form.UserLoginForm;
+import com.wz8790.nmshop.form.UserRegisterForm;
 import com.wz8790.nmshop.pojo.User;
 import com.wz8790.nmshop.service.IUserService;
 import com.wz8790.nmshop.vo.ResponseVo;
@@ -10,7 +9,6 @@ import com.wz8790.nmshop.vo.UserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,14 +27,9 @@ public class UserController {
     private IUserService userService;
 
     @PostMapping("/user/register")
-    public ResponseVo<UserVo> register(@Valid @RequestBody UserRegisterForm userRegisterForm,
-                                       BindingResult bindingResult) {
+    public ResponseVo<UserVo> register(@Valid @RequestBody UserRegisterForm userRegisterForm) {
 
         log.info("/user/register -------> {}", userRegisterForm.getUsername());
-
-        if (bindingResult.hasErrors()) {
-            return ResponseVo.error(StatusCodeEnum.PARAM_ERROR, bindingResult);
-        }
 
         User user = new User();
         BeanUtils.copyProperties(userRegisterForm, user);
@@ -45,14 +38,9 @@ public class UserController {
 
     @PostMapping("/user/login")
     public ResponseVo<UserVo> login(@Valid @RequestBody UserLoginForm userLoginForm,
-                                    BindingResult bindingResult,
                                     HttpSession httpSession) {
 
         log.info("/user/login -------> {}", userLoginForm.getUsername());
-
-        if (bindingResult.hasErrors()) {
-            return ResponseVo.error(StatusCodeEnum.PARAM_ERROR, bindingResult);
-        }
 
         ResponseVo<UserVo> login = userService.login(userLoginForm.getUsername(), userLoginForm.getPassword());
         httpSession.setAttribute(CURRENT_USER, login.getData());
