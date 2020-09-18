@@ -21,6 +21,10 @@ public enum  StatusCodeEnum {
 
     PRODUCT_OFF_SALE_OR_DELETED(12, "商品已下架或删除"),
 
+    PRODUCT_NOT_EXIST_ERROR(13, "商品不存在"),
+
+    PRODUCT_STOCK_ERROR(14, "商品库存不足"),
+
     SERVER_ERROR(-1, "服务端异常"),
 
     ;
