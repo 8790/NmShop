@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wz8790.nmshop.NmShopApplicationTests;
 import com.wz8790.nmshop.form.CartAddForm;
+import com.wz8790.nmshop.form.CartUpdateForm;
 import com.wz8790.nmshop.service.ICartService;
 import com.wz8790.nmshop.vo.CartVo;
 import com.wz8790.nmshop.vo.ResponseVo;
@@ -33,6 +34,21 @@ public class CartServiceImplTest extends NmShopApplicationTests {
     @Test
     public void list() {
         ResponseVo<CartVo> list = cartService.list(1);
+        log.info("list={}", gson.toJson(list));
+    }
+
+    @Test
+    public void update() {
+        CartUpdateForm form = new CartUpdateForm();
+//        form.setQuantity(5);
+        form.setSelected(false);
+        ResponseVo<CartVo> list = cartService.update(1, 26, form);
+        log.info("list={}", gson.toJson(list));
+    }
+
+    @Test
+    public void delete() {
+        ResponseVo<CartVo> list = cartService.delete(1, 29);
         log.info("list={}", gson.toJson(list));
     }
 }

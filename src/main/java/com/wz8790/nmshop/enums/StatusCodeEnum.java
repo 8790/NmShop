@@ -25,6 +25,8 @@ public enum  StatusCodeEnum {
 
     PRODUCT_STOCK_ERROR(14, "商品库存不足"),
 
+    CART_PRODUCT_NOT_EXIST_ERROR(15, "购物车中无此商品"),
+
     SERVER_ERROR(-1, "服务端异常"),
 
     ;

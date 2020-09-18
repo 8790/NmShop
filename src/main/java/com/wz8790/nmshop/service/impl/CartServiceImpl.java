@@ -5,6 +5,7 @@ import com.wz8790.nmshop.dao.ProductMapper;
 import com.wz8790.nmshop.enums.ProductStatusEnum;
 import com.wz8790.nmshop.enums.StatusCodeEnum;
 import com.wz8790.nmshop.form.CartAddForm;
+import com.wz8790.nmshop.form.CartUpdateForm;
 import com.wz8790.nmshop.pojo.Cart;
 import com.wz8790.nmshop.pojo.Product;
 import com.wz8790.nmshop.service.ICartService;
@@ -136,6 +137,51 @@ public class CartServiceImpl implements ICartService {
 
         //写入结果到Redis
         opsForHash.put(redisKey, productId, gson.toJson(cart));
+
+        return list(uid);
+    }
+
+    @Override
+    public ResponseVo<CartVo> update(Integer uid, Integer productId, CartUpdateForm form) {
+
+        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        String redisKey = String.format(CART_REDIS_KEY_TEMPLATE, uid);
+
+        //判断购物车中是否有这件商品
+        String productIdInRedis = opsForHash.get(redisKey, String.valueOf(productId));
+        if (StringUtils.isEmpty(productIdInRedis)) {
+            //如果没有 出错
+            return ResponseVo.error(StatusCodeEnum.CART_PRODUCT_NOT_EXIST_ERROR);
+        }
+        //如果有，修改对应数据
+        Cart cart = gson.fromJson(productIdInRedis, Cart.class);
+        if (form.getQuantity() != null && form.getQuantity() >= 0) {
+            cart.setQuantity(form.getQuantity());
+        }
+        if (form.getSelected() != null) {
+            cart.setProductSelected(form.getSelected());
+        }
+
+        //写入结果到Redis
+        opsForHash.put(redisKey, String.valueOf(productId), gson.toJson(cart));
+
+        return list(uid);
+    }
+
+    @Override
+    public ResponseVo<CartVo> delete(Integer uid, Integer productId) {
+        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        String redisKey = String.format(CART_REDIS_KEY_TEMPLATE, uid);
+
+        //判断购物车中是否有这件商品
+        String productIdInRedis = opsForHash.get(redisKey, String.valueOf(productId));
+        if (StringUtils.isEmpty(productIdInRedis)) {
+            //如果没有 出错
+            return ResponseVo.error(StatusCodeEnum.CART_PRODUCT_NOT_EXIST_ERROR);
+        }
+
+        //在Redis中删除
+        opsForHash.delete(redisKey, String.valueOf(productId));
 
         return list(uid);
     }
