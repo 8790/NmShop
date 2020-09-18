@@ -134,6 +134,7 @@ public class CartServiceImpl implements ICartService {
             //如果有，数量 + 1
             cart = gson.fromJson(opsForHash.get(redisKey, productId), Cart.class);
             cart.setQuantity(cart.getQuantity() + quantity);
+            cart.setProductSelected(form.getSelected());
         }
 
         //写入结果到Redis
