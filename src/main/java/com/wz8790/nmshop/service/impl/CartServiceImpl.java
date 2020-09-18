@@ -8,6 +8,7 @@ import com.wz8790.nmshop.form.CartAddForm;
 import com.wz8790.nmshop.pojo.Cart;
 import com.wz8790.nmshop.pojo.Product;
 import com.wz8790.nmshop.service.ICartService;
+import com.wz8790.nmshop.vo.CartProductVo;
 import com.wz8790.nmshop.vo.CartVo;
 import com.wz8790.nmshop.vo.ResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Map;
 
 @Service
 public class CartServiceImpl implements ICartService {
@@ -31,6 +35,66 @@ public class CartServiceImpl implements ICartService {
 
     @Autowired
     private Gson gson;
+
+    @Override
+    public ResponseVo<CartVo> list(Integer uid) {
+        HashOperations<String, String , String > opsForHash = redisTemplate.opsForHash();
+        String redisKey = String.format(CART_REDIS_KEY_TEMPLATE, uid);
+        CartVo cartVo = new CartVo();
+
+        //该用户购物车中所有的商品
+        Map<String, String> entries = opsForHash.entries(redisKey);
+
+        //遍历每个商品
+        ArrayList<CartProductVo> cartProductVos = new ArrayList<>();
+
+        boolean selectAll = true;
+        int cartTotalQuantity = 0;
+        BigDecimal cartTotalPrice = BigDecimal.ZERO;
+
+        //TODO: 将数据库访问操作放在for循环外，使用sql中的in操作代替
+        for (Map.Entry<String, String> entry : entries.entrySet()) {
+            //查出该商品的所有信息
+            Product product = productMapper.selectByPrimaryKey(Integer.valueOf(entry.getKey()));
+            //查出该商品购物车信息
+            Cart cart = gson.fromJson(entry.getValue(), Cart.class);
+
+            //如果有该商品
+            if (product != null) {
+                CartProductVo cartProductVo = new CartProductVo(
+                        product.getId(),
+                        cart.getQuantity(),
+                        product.getName(),
+                        product.getSubtitle(),
+                        product.getMainImage(),
+                        product.getPrice(),
+                        product.getStatus(),
+                        product.getPrice().multiply(BigDecimal.valueOf(cart.getQuantity())),
+                        product.getStock(),
+                        cart.getProductSelected()
+                );
+
+                cartProductVos.add(cartProductVo);
+                cartTotalQuantity += cart.getQuantity();
+                //只计算选中的商品的总价
+                if (cart.getProductSelected()) {
+                    cartTotalPrice = cartTotalPrice.add(cartProductVo.getProductTotalPrice());
+                }
+
+                if (!cart.getProductSelected()) {
+                    selectAll = false;
+                }
+
+            }
+        }
+
+        cartVo.setCartProductVoList(cartProductVos);
+        cartVo.setCartTotalPrice(cartTotalPrice);
+        cartVo.setCartTotalQuantity(cartTotalQuantity);
+        cartVo.setSelectedAll(selectAll);
+
+        return ResponseVo.success(cartVo);
+    }
 
     @Override
     public ResponseVo<CartVo> add(Integer uid, CartAddForm form) {
@@ -73,6 +137,6 @@ public class CartServiceImpl implements ICartService {
         //写入结果到Redis
         opsForHash.put(redisKey, productId, gson.toJson(cart));
 
-        return null;
+        return list(uid);
     }
 }

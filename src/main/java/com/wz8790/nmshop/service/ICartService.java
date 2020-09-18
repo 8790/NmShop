@@ -6,5 +6,7 @@ import com.wz8790.nmshop.vo.ResponseVo;
 
 public interface ICartService {
 
+    ResponseVo<CartVo> list(Integer uid);
+
     ResponseVo<CartVo> add(Integer uid, CartAddForm form);
 }
