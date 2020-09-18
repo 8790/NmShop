@@ -21,6 +21,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -184,5 +185,54 @@ public class CartServiceImpl implements ICartService {
         opsForHash.delete(redisKey, String.valueOf(productId));
 
         return list(uid);
+    }
+
+    @Override
+    public ResponseVo<CartVo> selectAll(Integer uid) {
+        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        String redisKey = String.format(CART_REDIS_KEY_TEMPLATE, uid);
+
+        for (Cart cart : listForCart(uid)) {
+            cart.setProductSelected(true);
+            opsForHash.put(redisKey,
+                    String.valueOf(cart.getProductId()),
+                    gson.toJson(cart)
+            );
+        }
+        return list(uid);
+    }
+
+    @Override
+    public ResponseVo<CartVo> unSelectAll(Integer uid) {
+        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        String redisKey = String.format(CART_REDIS_KEY_TEMPLATE, uid);
+
+        for (Cart cart : listForCart(uid)) {
+            cart.setProductSelected(false);
+            opsForHash.put(redisKey,
+                    String.valueOf(cart.getProductId()),
+                    gson.toJson(cart)
+            );
+        }
+        return list(uid);
+    }
+
+    @Override
+    public ResponseVo<Integer> sum(Integer uid) {
+        Integer sum = listForCart(uid).stream().map(Cart::getQuantity).reduce(0, Integer::sum);
+        return ResponseVo.success(sum);
+    }
+
+    private List<Cart> listForCart(Integer uid) {
+        HashOperations<String, String , String > opsForHash = redisTemplate.opsForHash();
+        String redisKey = String.format(CART_REDIS_KEY_TEMPLATE, uid);
+        //该用户购物车中所有的商品
+        Map<String, String> entries = opsForHash.entries(redisKey);
+        ArrayList<Cart> carts = new ArrayList<>();
+        for (Map.Entry<String, String> entry : entries.entrySet()) {
+            carts.add(gson.fromJson(entry.getValue(), Cart.class));
+        }
+
+        return carts;
     }
 }

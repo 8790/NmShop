@@ -20,20 +20,22 @@ public class CartServiceImplTest extends NmShopApplicationTests {
     @Autowired
     private ICartService cartService;
 
+    public static final int UID = 1;
+
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     @Test
     public void add() {
         CartAddForm cartAddForm = new CartAddForm();
-        cartAddForm.setProductId(27);
+        cartAddForm.setProductId(26);
         cartAddForm.setSelected(true);
-        ResponseVo<CartVo> responseVo = cartService.add(1, cartAddForm);
+        ResponseVo<CartVo> responseVo = cartService.add(UID, cartAddForm);
         log.info("list={}", gson.toJson(responseVo));
     }
 
     @Test
     public void list() {
-        ResponseVo<CartVo> list = cartService.list(1);
+        ResponseVo<CartVo> list = cartService.list(UID);
         log.info("list={}", gson.toJson(list));
     }
 
@@ -42,13 +44,31 @@ public class CartServiceImplTest extends NmShopApplicationTests {
         CartUpdateForm form = new CartUpdateForm();
 //        form.setQuantity(5);
         form.setSelected(false);
-        ResponseVo<CartVo> list = cartService.update(1, 26, form);
+        ResponseVo<CartVo> list = cartService.update(UID, 26, form);
         log.info("list={}", gson.toJson(list));
     }
 
     @Test
     public void delete() {
-        ResponseVo<CartVo> list = cartService.delete(1, 29);
+        ResponseVo<CartVo> list = cartService.delete(UID, 29);
         log.info("list={}", gson.toJson(list));
+    }
+
+    @Test
+    public void selectAll() {
+        ResponseVo<CartVo> list = cartService.selectAll(UID);
+        log.info("list={}", gson.toJson(list));
+    }
+
+    @Test
+    public void unSelectAll() {
+        ResponseVo<CartVo> list = cartService.unSelectAll(UID);
+        log.info("list={}", gson.toJson(list));
+    }
+
+    @Test
+    public void sum() {
+        ResponseVo<Integer> sum = cartService.sum(UID);
+        log.info("sum={}", gson.toJson(sum));
     }
 }
