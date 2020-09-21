@@ -27,6 +27,8 @@ public enum  StatusCodeEnum {
 
     CART_PRODUCT_NOT_EXIST_ERROR(15, "购物车中无此商品"),
 
+    DELETE_SHIPPING_ERROR(16, "删除地址失败"),
+
     SERVER_ERROR(-1, "服务端异常"),
 
     ;
