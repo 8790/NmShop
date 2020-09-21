@@ -2,6 +2,7 @@ package com.wz8790.nmshop.service.impl;
 
 import com.wz8790.nmshop.dao.ProductMapper;
 import com.wz8790.nmshop.dao.ShippingMapper;
+import com.wz8790.nmshop.enums.ProductStatusEnum;
 import com.wz8790.nmshop.enums.StatusCodeEnum;
 import com.wz8790.nmshop.pojo.Cart;
 import com.wz8790.nmshop.pojo.Product;
@@ -72,6 +73,10 @@ public class OrderServiceImpl implements IOrderService {
             // 是否有商品
             if (product == null) {
                 return ResponseVo.error(StatusCodeEnum.PRODUCT_NOT_EXIST_ERROR);
+            }
+            //商品是否上架
+            if (!product.getStatus().equals(ProductStatusEnum.ON_SALE.getCode())) {
+                return ResponseVo.error(StatusCodeEnum.PRODUCT_OFF_SALE_OR_DELETED);
             }
             //库存是否充足
             if (product.getStock() < cart.getQuantity()) {
