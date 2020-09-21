@@ -2,8 +2,11 @@ package com.wz8790.nmshop.service;
 
 import com.wz8790.nmshop.form.CartAddForm;
 import com.wz8790.nmshop.form.CartUpdateForm;
+import com.wz8790.nmshop.pojo.Cart;
 import com.wz8790.nmshop.vo.CartVo;
 import com.wz8790.nmshop.vo.ResponseVo;
+
+import java.util.List;
 
 public interface ICartService {
 
@@ -21,5 +24,6 @@ public interface ICartService {
 
     ResponseVo<Integer> sum(Integer uid);
 
+    List<Cart> listForCart(Integer uid);
 
 }

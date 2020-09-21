@@ -29,6 +29,10 @@ public enum  StatusCodeEnum {
 
     DELETE_SHIPPING_ERROR(16, "删除地址失败"),
 
+    SHIPPING_NOT_EXIST_ERROR(17, "地址不存在"),
+
+    CART_SELECT_IS_EMPTY_ERROR(18, "未选中商品"),
+
     SERVER_ERROR(-1, "服务端异常"),
 
     ;
