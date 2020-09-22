@@ -1,5 +1,6 @@
 package com.wz8790.nmshop.service.impl;
 
+import com.github.pagehelper.PageInfo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wz8790.nmshop.NmShopApplicationTests;
@@ -47,6 +48,13 @@ public class OrderServiceImplTest extends NmShopApplicationTests {
         ResponseVo<OrderVo> responseVo = orderService.create(uid, shippingId);
         log.info("response = {}", gson.toJson(responseVo));
         Assert.assertEquals(StatusCodeEnum.SUCCESS.getCode(), responseVo.getStatus());
+    }
+
+    @Test
+    public void list() {
+        ResponseVo<PageInfo> list = orderService.list(uid, 1, 10);
+        log.info("response = {}", gson.toJson(list));
+        Assert.assertEquals(StatusCodeEnum.SUCCESS.getCode(), list.getStatus());
     }
 
 }
