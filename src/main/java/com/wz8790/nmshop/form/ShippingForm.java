@@ -11,9 +11,6 @@ public class ShippingForm {
     private String receiverName;
 
     @NotBlank
-    private String receiverPhone;
-
-    @NotBlank
     private String receiverMobile;
 
     @NotBlank

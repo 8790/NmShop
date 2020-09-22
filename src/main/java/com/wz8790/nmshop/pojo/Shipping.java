@@ -9,8 +9,6 @@ public class Shipping {
 
     private String receiverName;
 
-    private String receiverPhone;
-
     private String receiverMobile;
 
     private String receiverProvince;
@@ -49,14 +47,6 @@ public class Shipping {
 
     public void setReceiverName(String receiverName) {
         this.receiverName = receiverName;
-    }
-
-    public String getReceiverPhone() {
-        return receiverPhone;
-    }
-
-    public void setReceiverPhone(String receiverPhone) {
-        this.receiverPhone = receiverPhone;
     }
 
     public String getReceiverMobile() {

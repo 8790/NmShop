@@ -35,7 +35,6 @@ public class ShippingServiceImplTest extends NmShopApplicationTests {
         form.setReceiverAddress("天津师范大学");
         form.setReceiverCity("天津市");
         form.setReceiverMobile("13233334444");
-        form.setReceiverPhone("13344556677");
         form.setReceiverProvince("天津");
         form.setReceiverZip("300380");
         form.setReceiverDistrict("西青区");
