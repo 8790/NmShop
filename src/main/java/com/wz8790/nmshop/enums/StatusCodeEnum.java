@@ -33,6 +33,10 @@ public enum  StatusCodeEnum {
 
     CART_SELECT_IS_EMPTY_ERROR(18, "未选中商品"),
 
+    ORDER_NOT_EXIST_ERROR(19, "订单不存在"),
+
+    ORDER_STATUS_ERROR(20, "订单状态有误"),
+
     SERVER_ERROR(-1, "服务端异常"),
 
     ;

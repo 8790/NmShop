@@ -202,4 +202,10 @@
     from mall_order
     where user_id = #{uid,jdbcType=INTEGER}
   </select>
+  <select id="selectByOrderNo" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mall_order
+    where order_no = #{orderNo,jdbcType=INTEGER}
+  </select>
 </mapper>

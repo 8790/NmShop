@@ -16,8 +16,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
+@Transactional
 public class OrderServiceImplTest extends NmShopApplicationTests {
 
     @Autowired
@@ -55,6 +57,30 @@ public class OrderServiceImplTest extends NmShopApplicationTests {
         ResponseVo<PageInfo> list = orderService.list(uid, 1, 10);
         log.info("response = {}", gson.toJson(list));
         Assert.assertEquals(StatusCodeEnum.SUCCESS.getCode(), list.getStatus());
+    }
+
+    @Test
+    public void detail() {
+        Long orderNo = createTest();
+        ResponseVo<OrderVo> responseVo = orderService.detail(uid, orderNo);
+        log.info("response = {}", gson.toJson(responseVo));
+        Assert.assertEquals(StatusCodeEnum.SUCCESS.getCode(), responseVo.getStatus());
+
+    }
+
+    @Test
+    public void cancel() {
+        Long orderNo = createTest();
+        ResponseVo responseVo = orderService.cancel(uid, orderNo);
+        log.info("response = {}", gson.toJson(responseVo));
+        Assert.assertEquals(StatusCodeEnum.SUCCESS.getCode(), responseVo.getStatus());
+
+    }
+
+    private Long createTest() {
+        ResponseVo<OrderVo> responseVo = orderService.create(uid, shippingId);
+        log.info("response = {}", gson.toJson(responseVo));
+        return responseVo.getData().getOrderNo();
     }
 
 }
