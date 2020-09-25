@@ -163,6 +163,7 @@ public class OrderServiceImpl implements IOrderService {
                     shippingMap.get(order.getShippingId()));
             orderVoList.add(orderVo);
         }
+        Collections.reverse(orderVoList);
 
         PageInfo pageInfo = new PageInfo(orderList);
         pageInfo.setList(orderVoList);
